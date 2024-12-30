@@ -92,13 +92,14 @@ function timmerClock(duration, updateCallback, endCallback) {
   const timer = setInterval(() => {
     if (time <= 0) {
       clearInterval(timer);
-      if (endCallback) endCallback();
+      if (endCallback) endCallback(); 
     } else {
       time--;
       if (updateCallback) updateCallback(time);
     }
   }, 1000);
 }
+
 
 function loadQuestion(index) {
   main_card.innerHTML = "";
@@ -166,18 +167,25 @@ function loadQuestion(index) {
 
   main_card.appendChild(card);
 
-  // Start the timer
+  // Start the timer with auto-submit logic
   timmerClock(
-    10,
+    10, 
     (time) => {
       span_timmer_clock.innerText = `Time left: ${time}s`;
     },
     () => {
-      alert("your Time is up You have to restart Test")
-      first_page();
+      span_timmer_clock.innerText = "Time's up!";
+      alert("Time's up! The current question is skipped.");
+      currentQuestionIndex++; // Skip to the next question
+      if (currentQuestionIndex < quizQuestions.length) {
+        loadQuestion(currentQuestionIndex);
+      } else {
+        displayQuizResults();
+      }
     }
   );
 }
+
 
 function handleAnswerSelection(selectedIndex, correctIndex, feedback, button) {
   if (selectedIndex === correctIndex) {
@@ -189,7 +197,6 @@ function handleAnswerSelection(selectedIndex, correctIndex, feedback, button) {
     feedback.style.color = "red";
   }
 
-  // Disable all buttons after answering
   const buttons = button.parentElement.querySelectorAll("button");
   buttons.forEach((btn) => (btn.disabled = true));
 }
