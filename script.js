@@ -173,7 +173,8 @@ function loadQuestion(index) {
       span_timmer_clock.innerText = `Time left: ${time}s`;
     },
     () => {
-      span_timmer_clock.innerText = "Time's up!";
+      alert("your Time is up You have to restart Test")
+      first_page();
     }
   );
 }
