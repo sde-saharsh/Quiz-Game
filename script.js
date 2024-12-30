@@ -1,6 +1,9 @@
+let currentQuestionIndex = 0;
+let score = 0;
+let currentTimer = null; // Store the current timer for each question
+
 const main_card = document.querySelector('.main-card');
 
-// Quiz Questions
 const quizQuestions = [
   {
     question: "What is my favorite thing about you?",
@@ -39,14 +42,11 @@ const quizQuestions = [
   },
 ];
 
-let currentQuestionIndex = 0;
-let score = 0;
-
 window.addEventListener('DOMContentLoaded', first_page);
 
 function first_page() {
   main_card.innerHTML = "";
-
+  
   let card = document.createElement('div');
   card.className = "card";
 
@@ -63,7 +63,7 @@ function first_page() {
 
   let card_text_1 = document.createElement('p');
   card_text_1.className = "card-text";
-  card_text_1.innerHTML = "1. If you want to submit Quiz, click on the submit button.";
+  card_text_1.innerHTML = "1. If you want to submit the Quiz, click on the submit button.";
 
   let card_text_2 = document.createElement('p');
   card_text_2.className = "card-text";
@@ -89,10 +89,14 @@ function first_page() {
 
 function timmerClock(duration, updateCallback, endCallback) {
   let time = duration;
-  const timer = setInterval(() => {
+  if (currentTimer) {
+    clearInterval(currentTimer); // Clear previous timer
+  }
+
+  currentTimer = setInterval(() => {
     if (time <= 0) {
-      clearInterval(timer);
-      if (endCallback) endCallback(); 
+      clearInterval(currentTimer);
+      if (endCallback) endCallback();
     } else {
       time--;
       if (updateCallback) updateCallback(time);
@@ -100,10 +104,8 @@ function timmerClock(duration, updateCallback, endCallback) {
   }, 1000);
 }
 
-
 function loadQuestion(index) {
   main_card.innerHTML = "";
-
   const questionData = quizQuestions[index];
 
   let card = document.createElement("div");
@@ -167,7 +169,7 @@ function loadQuestion(index) {
 
   main_card.appendChild(card);
 
-  // Start the timer with auto-submit logic
+  // Start the timer for the question
   timmerClock(
     10, 
     (time) => {
@@ -185,7 +187,6 @@ function loadQuestion(index) {
     }
   );
 }
-
 
 function handleAnswerSelection(selectedIndex, correctIndex, feedback, button) {
   if (selectedIndex === correctIndex) {
