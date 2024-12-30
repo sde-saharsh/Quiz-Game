@@ -1,6 +1,6 @@
 let currentQuestionIndex = 0;
 let score = 0;
-let currentTimer = null; // Store the current timer for each question
+let currentTimer = null; 
 
 const main_card = document.querySelector('.main-card');
 
